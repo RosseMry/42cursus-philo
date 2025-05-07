@@ -45,6 +45,7 @@ int init_data(int argc, char **argv)
 		return (MALLOC_ERROR);
 	}
 	init_philo(&table);
+	create_threads(&table);
 	/*
 	inicializar cada filosofo por id y el id menor a la cantidad de filosofos
 	init_fork(); recordar invocar filosofo y rellenar el tenedor de derecha y el de izquierda iniciar mutex

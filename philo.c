@@ -50,5 +50,6 @@ int main(int argc, char **argv)
 		write(2, "Error: Failed to initialize philosopher\n", 40);
 		return (MALLOC_ERROR);
 	}
+	philo_routine(argv);
 	return (0);
 }

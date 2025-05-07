@@ -16,6 +16,11 @@ int ft_death(t_table *table)
     return(0);
 }
 
+static int get_nb_philos(t_table *table)
+{
+    return table->num_philo;
+}
+
 void *philo_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
@@ -28,8 +33,8 @@ void *philo_routine(void *arg)
 
         printf("Philosopher %d is hungry\n", philo->id);
         // Take forks (mutex lock)
-        pthread_mutex_lock(philo->left_fork);
-        pthread_mutex_lock(philo->right_fork);
+        pthread_mutex_lock(&philo->left_fork_m);
+        pthread_mutex_lock(&philo->right_fork_m);
 
         printf("Philosopher %d is eating\n", philo->id);
         // Simulate eating
@@ -38,8 +43,8 @@ void *philo_routine(void *arg)
         usleep(philo->table->time_to_eat * 1000);
 
         // Release forks (mutex unlock)
-        pthread_mutex_unlock(philo->left_fork);
-        pthread_mutex_unlock(philo->right_fork);
+        pthread_mutex_unlock(&philo->left_fork_m);
+        pthread_mutex_unlock(&philo->right_fork_m);
 
         printf("Philosopher %d is sleeping\n", philo->id);
         // Simulate sleeping
@@ -53,12 +58,12 @@ int create_threads(t_table *table)
     int i;
     int nb_philo;
 
-    nb_philo = get_num_philo(table);
+    nb_philo = get_nb_philos(table);
     i = 0;
     table ->start_time = get_time();
     while (i < table->num_philo)
     {
-        if (pthread_create(&table->philo[i], NULL, &philo_routine, &table->philo[i]) != 0)
+        if (pthread_create(&table->philo[i].thread, NULL, &philo_routine, &table->philo[i]) != 0)
         {
             write(2, "Error: Failed to create thread\n", 31);
             return (1);

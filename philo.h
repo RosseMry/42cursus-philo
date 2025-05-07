@@ -77,4 +77,6 @@ int ft_death(t_table *table);
 time_t get_time(void);
 int init_struct(t_table *table, int argc , char **argv);
 int init_data(int argc, char **argv);
+int create_threads(t_table *table);
+void *philo_routine(void *arg);
 #endif
