@@ -1,22 +1,23 @@
 #include "philo.h"
 
-int ft_death(t_table *table)
+int ft_death(t_philo *philo)
 {
-    t_philo *philo;
+    t_table *table;
     time_t current_time = get_time();
     if((current_time - philo ->last_eat_time) > table ->time_to_die)
     {
-        if(philo ->status == 0)
-        {
-            philo ->status = 3;
+        // if(philo ->status == 0)
+        // {
+        philo ->status = 3;
             //funcion para imprimir status
-            return(1);
-        }
+        // }
+        return(1);
+        // philo ->status = 3;
     }
     return(0);
 }
 
-static int get_nb_philos(t_table *table)
+int get_nb_philos(t_table *table)
 {
     return table->num_philo;
 }
@@ -24,11 +25,18 @@ static int get_nb_philos(t_table *table)
 void *philo_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
+    if (table == NULL)
+    {
+        write(2, "Error: Table is NULL\n", 22);
+        return NULL;
+    }
 
     while (1)
     {
+        printf("time_to_sleep: %ld\n", table->time_to_sleep);
         printf("Philosopher %d is thinking\n", philo->id);
         // Simulate thinking
+        printf("time %ld\n", philo->table->time_to_sleep * 1000);
         usleep(philo->table->time_to_sleep * 1000);
 
         printf("Philosopher %d is hungry\n", philo->id);
@@ -61,7 +69,7 @@ int create_threads(t_table *table)
     nb_philo = get_nb_philos(table);
     i = 0;
     table ->start_time = get_time();
-    while (i < table->num_philo)
+    while (i < nb_philo)
     {
         if (pthread_create(&table->philo[i].thread, NULL, &philo_routine, &table->philo[i]) != 0)
         {
@@ -70,5 +78,11 @@ int create_threads(t_table *table)
         }
         i++;
     }
+    if (pthread_create(&table ->monitor_t, NULL, &monitor_routine, table) != 0)
+    {
+        write(2, "Error: Failed to create monitor thread\n", 39);
+        return (1);
+    }
+
     return (0);
 }

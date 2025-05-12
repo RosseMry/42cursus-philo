@@ -14,9 +14,10 @@ time_t get_time(void)
 int init_struct(t_table *table, int argc , char **argv)
 {
 	table->num_philo = ft_atoi(argv[1]);
-	table->time_to_die = (time_t)ft_atoi(argv[2]);
-	table->time_to_eat = (time_t)ft_atoi(argv[3]);
-	table->time_to_sleep = (time_t)ft_atoi(argv[4]);
+	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_sleep = ft_atoi(argv[4]);
+	printf("time_to_sleep: %ld\n", table->time_to_sleep);
 	if(argc == 6)
 		table->must_eat = ft_atoi(argv[5]);
 	else
@@ -35,22 +36,3 @@ int init_struct(t_table *table, int argc , char **argv)
 
 //INIT PHILO
 
-int init_data(int argc, char **argv)
-{
-	t_table  table;
-
-	if(init_struct(&table, argc, argv) != 0)
-	{
-		write(2, "Error: Failed to initialize philosopher\n", 40);
-		return (MALLOC_ERROR);
-	}
-	init_philo(&table);
-	create_threads(&table);
-	/*
-	inicializar cada filosofo por id y el id menor a la cantidad de filosofos
-	init_fork(); recordar invocar filosofo y rellenar el tenedor de derecha y el de izquierda iniciar mutex
-	etc...
-	*/
-	return (0);
-
-}
