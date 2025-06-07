@@ -37,6 +37,8 @@ int	is_digit(int argc, char **argv)
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
 				return (1);
+			if (argv[i][0] == '0')
+				return (1);
 			j++;
 		}
 		i++;
