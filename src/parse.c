@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rmarcas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/20 11:42:24 by rmarcas-          #+#    #+#             */
+/*   Updated: 2025/05/20 11:48:23 by rmarcas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../includes/philo.h"
+
 int	ft_atoi(char *str)
 {
-	int i;
-	int sign;
-	long res;
+	int		i;
+	int		sign;
+	long	res;
 
 	i = 0;
 	res = 0;
 	sign = 1;
-	while ((str[i] >= 9 && str[i] <= 13)  || str[i] == '\r')
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == '\r')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -26,8 +38,8 @@ int	ft_atoi(char *str)
 
 int	is_digit(int argc, char **argv)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	while (i < argc)
@@ -36,8 +48,6 @@ int	is_digit(int argc, char **argv)
 		while (argv[i][j])
 		{
 			if (argv[i][j] < '0' || argv[i][j] > '9')
-				return (1);
-			if (argv[i][0] == '0')
 				return (1);
 			j++;
 		}

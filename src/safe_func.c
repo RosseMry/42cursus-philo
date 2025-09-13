@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   safe_func.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rmarcas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/20 11:17:32 by rmarcas-          #+#    #+#             */
+/*   Updated: 2025/05/20 11:21:34 by rmarcas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../includes/philo.h"
 
 void	*safe_malloc(size_t bytes)
 {
-	void *ptr;
+	void	*ptr;
 
 	ptr = malloc(bytes);
 	if (ptr == NULL)
@@ -31,37 +42,35 @@ static void	handle_mutex_error(int status, t_opcode opcode)
 			error_exit("Error: Insufficient memory for mutex\n");
 		else if (EBUSY == status)
 			error_exit("Error: Mutex is already locked\n");
-
 		exit(MALLOC_ERROR);
 	}
 }
+
 void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
 {
-	if(LOCK == opcode)
+	if (LOCK == opcode)
 		handle_mutex_error(pthread_mutex_lock(mutex), opcode);
-	else if(UNLOCK == opcode)
+	else if (UNLOCK == opcode)
 		handle_mutex_error(pthread_mutex_unlock(mutex), opcode);
-	else if(INIT == opcode)
+	else if (INIT == opcode)
 		handle_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
-	else if(DESTROY == opcode)
+	else if (DESTROY == opcode)
 		handle_mutex_error(pthread_mutex_destroy(mutex), opcode);
-	else if(DETACH == opcode)
+	else if (DETACH == opcode)
 		error_exit("Error: Failed to detach thread\n");
 }
-
-
 
 static void	handle_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
-		return;
+		return ;
 	if (EAGAIN == status)
 		error_exit("Error: Failed to create thread\n");
 	else if (EINVAL == status && opcode == CREATE)
 		error_exit("Error: Invalid thread attributes\n");
-	else if (EINVAL == status && (opcode == JOIN || opcode == DETACH)) 
+	else if (EINVAL == status && (opcode == JOIN || opcode == DETACH))
 		error_exit("Error: Invalid thread attributes\n");
-	else if (ESRCH == status) 
+	else if (ESRCH == status)
 		error_exit("Error: No thread with the specified ID\n");
 	else if (EDEADLK == status)
 		error_exit("Error: Deadlock detected\n");
@@ -69,7 +78,8 @@ static void	handle_thread_error(int status, t_opcode opcode)
 		error_exit("Error: No permission to join thread\n");
 }
 
-void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *table, t_opcode opcode)
+void	safe_thread_handle(pthread_t *thread, \
+		void *(*foo)(void *), void *table, t_opcode opcode)
 {
 	if (CREATE == opcode)
 		handle_thread_error(pthread_create(thread, NULL, foo, table), opcode);
@@ -79,7 +89,4 @@ void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *), void *table, t_
 		handle_thread_error(pthread_detach(*thread), opcode);
 	else
 		error_exit("Error: Invalid thread operation\n");
-
 }
-
-

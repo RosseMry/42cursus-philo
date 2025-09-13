@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rmarcas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/20 11:21:50 by rmarcas-          #+#    #+#             */
+/*   Updated: 2025/05/20 11:23:25 by rmarcas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../includes/philo.h"
+
 void	*monitor_routine(void *arg)
 {
 	t_table	*table;
-	int	i;
+	int		i;
 
 	table = (t_table *)arg;
 	usleep(5000);
@@ -24,7 +36,8 @@ void	*monitor_routine(void *arg)
 
 int	create_monitor_thread(t_table *table, pthread_t *monitor)
 {
-	int i;
+	int	i;
+
 	if (pthread_create(monitor, NULL, monitor_routine, table) != 0)
 	{
 		i = table->num_philo;
@@ -37,24 +50,24 @@ int	create_monitor_thread(t_table *table, pthread_t *monitor)
 	}
 	return (0);
 }
+
 int	create_threads(t_table *table)
 {
-	pthread_t monitor;
+	pthread_t	monitor;
 
 	table ->start_time = get_time();
-	if(create_philosopher_thread(table) != 0)
+	if (create_philosopher_thread(table) != 0)
 	{
 		printf(RED"Error: Failed to create philosopher threads\n");
 		return (MALLOC_ERROR);
 	}
-	if(create_monitor_thread(table, &monitor) != 0)
+	if (create_monitor_thread(table, &monitor) != 0)
 	{
 		printf(RED"Error: Failed to create monitor thread\n");
 		return (MALLOC_ERROR);
 	}
 	table ->monitor_t = monitor;
-	while(!check_stop(table))
+	while (!check_stop(table))
 		precise_usleep(1);
 	return (0);
-	
 }

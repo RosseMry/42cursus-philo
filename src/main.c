@@ -1,13 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rmarcas- <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/20 11:41:16 by rmarcas-          #+#    #+#             */
+/*   Updated: 2025/05/20 11:42:11 by rmarcas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../includes/philo.h"
+
+int	get_nb_philos(t_table *table)
+{
+	return (table->num_philo);
+}
 
 int	init_philo(t_table *table)
 {
-	if(init_struct_data(table) != 0)
+	if (init_struct_data(table) != 0)
 	{
 		printf(RED"Error: Failed to initialize philosopher\n");
 		return (MALLOC_ERROR);
 	}
-	if(init_philo_data(table) != 0)
+	if (init_philo_data(table) != 0)
 	{
 		printf(RED"Error: Failed to initialize philosopher\n");
 		return (MALLOC_ERROR);
@@ -17,14 +33,14 @@ int	init_philo(t_table *table)
 
 int	ft_simulation(int argc, char **argv)
 {
-	t_table  table;
+	t_table	table;
 
-	if(init_struct(&table, argc, argv) != 0)
+	if (init_struct(&table, argc, argv) != 0)
 	{
 		printf(RED"Error: Failed to initialize philosopher\n");
 		return (MALLOC_ERROR);
 	}
-	if( init_philo(&table) != 0 || create_threads(&table))
+	if (init_philo(&table) != 0 || create_threads(&table))
 	{
 		printf(RED"Error: Failed to initialize philosopher\n");
 		destroy_mutex(&table);
@@ -37,12 +53,12 @@ int	ft_simulation(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	if(check_input(argc, argv) != 0)
+	if (check_input(argc, argv) != 0)
 	{
 		printf(RED"Error: Invalid input\n");
 		return (WRONG_INPUT);
 	}
-	if(ft_simulation(argc, argv) != 0)
+	if (ft_simulation(argc, argv) != 0)
 	{
 		printf(RED"Error: Failed to initialize philosopher\n");
 		return (MALLOC_ERROR);
